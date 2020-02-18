@@ -1281,7 +1281,7 @@ drivers para os diversos periféricos e também softwares para rede, gerenciamen
 </ul>
 <p>Será necessário adicionar as seguintes bibliotecas (APIs/ drivers) a esse projeto:</p>
 <div class="admonition example">
-<p class="admonition-title">Execute</p>
+<p class="admonition-title">Tarefa</p>
 <p>Você deve inserir as bibliotecas a seguir no projeto!</p>
 </div>
 <ul>
@@ -1318,7 +1318,7 @@ drivers para os diversos periféricos e também softwares para rede, gerenciamen
 <h2 id="inicializacao-do-uc">Inicialização do uC<a class="headerlink" href="#inicializacao-do-uc" title="Permanent link">&para;</a></h2>
 <p>Antes da execução de qualquer <code>firmware</code> é necessário realizarmos configurações no uC que pode variar desde configuração de pino, inicialização de memória, configuração de clock,  periféricos de comunicação/ .... No nosso caso iremos começar configurando o clock do uC e desativando o <code>WatchDog Timer</code>.</p>
 <div class="admonition example">
-<p class="admonition-title">Modifique <code>main.c</code></p>
+<p class="admonition-title">Tarefa: Modifique <code>main.c</code></p>
 <p>Modifique a função <code>init()</code> incluindo as seguintes linhas de código.
 <div class="codehilite"><pre><span></span><span class="c1">// Função de inicialização do uC</span>
 <span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
@@ -1389,7 +1389,7 @@ conseguimos responder:</p>
 <p>Agora será necessário transcrever essas informações para o nosso código em C, para isso iremos 
 <code>definir</code></p>
 <div class="admonition example">
-<p class="admonition-title">Modifique <code>main.c</code></p>
+<p class="admonition-title">Tarefa: Modifique <code>main.c</code></p>
 <p>Iremos incorporar essa informação no nosso código via os <code>#defines</code> no começo do <code>main.c</code>:</p>
 <div class="codehilite"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;asf.h&quot;</span><span class="cp"></span>
 
@@ -1419,7 +1419,7 @@ conseguimos responder:</p>
 <p><img alt="" src="../imgs/IOs/ID.png" /></p>
 <p><img alt="❗" class="emojione" src="https://cdn.jsdelivr.net/emojione/assets/svg/2757.svg" title=":exclamation:" /> Note pela tabela que o <strong>PIOC</strong> (aquele que irá controlar o LED) possui ID 12, agora precisamos transpor isso para o nosso código! Vamos editar a linha do nosso <code>main.c</code> que possuia o <strong>???</strong>:</p>
 <div class="admonition example">
-<p class="admonition-title">Modifique <code>main.c</code></p>
+<p class="admonition-title">Tarefa: Modifique <code>main.c</code></p>
 <p>Insira o valor <code>12</code> no lugar do <strong>???</strong> no define <code>LED_PIO_ID</code></p>
 <div class="codehilite"><pre><span></span><span class="cp">#define LED_PIO_ID  12  </span><span class="c1">// ID do periférico PIOC (controla LED)</span>
 </pre></div>
@@ -1442,7 +1442,7 @@ conseguimos responder:</p>
 <h3 id="configurando-o-pioc">Configurando o PIOC<a class="headerlink" href="#configurando-o-pioc" title="Permanent link">&para;</a></h3>
 <p>Todo pino no PIO é inicializado em modo entrada, para usarmos como saída será necessário indicarmos ao PIO. Para isso, usaremos a seguinte função <a href="(http://asf.atmel.com/docs/latest/same70/html/group__sam__drivers__pio__group.html)"><code>pio_set_output(...)</code></a>, definida no <a href="http://asf.atmel.com/docs/latest/same70/html/"><code>ASF do SAME70</code></a>.</p>
 <div class="admonition example">
-<p class="admonition-title">Modifique <code>init()</code></p>
+<p class="admonition-title">Tarefa: Modifique <code>init()</code></p>
 <p>Inseria a seguinte chamada de função na inicialização. Isso configura o PIOC para tratar o bit 8 (index 8) como saída.</p>
 <div class="codehilite"><pre><span></span><span class="c1">//Inicializa PC8 como saída</span>
 <span class="n">pio_set_output</span><span class="p">(</span><span class="n">LED_PIO</span><span class="p">,</span> <span class="n">LED_PIO_IDX_MASK</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
@@ -1509,7 +1509,7 @@ conseguimos responder:</p>
 </li>
 </ul>
 <div class="admonition example">
-<p class="admonition-title">Modifique <code>main()</code></p>
+<p class="admonition-title">Tarefa: Modifique <code>main()</code></p>
 <p>Modifique a função <code>main</code> para fazermos o LED piscar interruptamente (1 -&gt; delay 200 ms -&gt; 0 -&gt; delay 200 ms -&gt; ....):</p>
 <div class="codehilite"><pre><span></span><span class="c1">// Funcao principal chamada na inicalizacao do uC.</span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
@@ -1532,7 +1532,7 @@ conseguimos responder:</p>
 
 </div>
 <div class="admonition example">
-<p class="admonition-title">Programe e teste</p>
+<p class="admonition-title">Tarefa: Programe e teste</p>
 <ol>
 <li>Programe o uC</li>
 <li>Verifique o resultado esperado</li>
@@ -1606,7 +1606,7 @@ conseguimos responder:</p>
 <h3 id="exportando-informacoes-para-o-codigo">Exportando informações para o código<a class="headerlink" href="#exportando-informacoes-para-o-codigo" title="Permanent link">&para;</a></h3>
 <p>Agora precisamos fazer a ponte entre o mundo externo e o firmware que será executado no microcontrolador, pela tabela anterior insira e complete os defines a seguir no <code>main.c</code> (perto dos defines do LED).</p>
 <div class="admonition example">
-<p class="admonition-title">Modifique</p>
+<p class="admonition-title">Tarefa: Modifique</p>
 <p>Com a tabela preenchida, defina e inicialize novos defines para lidarmos com o botão, da mesma maneira que foi feito o LED:</p>
 <div class="codehilite"><pre><span></span><span class="c1">// Configuracoes do botao</span>
 <span class="cp">#define BUT_PIO</span>
@@ -1626,13 +1626,12 @@ conseguimos responder:</p>
 <h4 id="pmc-pio">PMC PIO<a class="headerlink" href="#pmc-pio" title="Permanent link">&para;</a></h4>
 <p>Com os defines "definidos" podemos ativar o clock do <strong>PIO</strong> que gerencia o pino, para isso insira na função de inicialização <code>init()</code> após a inicialização do LED.</p>
 <div class="admonition example">
-<p class="admonition-title">Modifique <code>init</code></p>
+<p class="admonition-title">Tarefa: Modifique <code>init</code></p>
 <p>Modifique a função <code>init()</code> inserindo a inicialização do novo PIO:</p>
 <div class="codehilite"><pre><span></span><span class="c1">// Inicializa PIO do botao</span>
-<span class="n">pmc_enable_periph_clk</span><span class="p">(</span><span class="n">ARG0</span><span class="p">);</span>
+<span class="n">pmc_enable_periph_clk</span><span class="p">(</span><span class="n">BUT_PIO</span><span class="p">);</span>
 </pre></div>
 
-<p><img alt="❗" class="emojione" src="https://cdn.jsdelivr.net/emojione/assets/svg/2757.svg" title=":exclamation:" /> Você deve substituir <code>ARG0</code> pelo valor correto!!</p>
 </div>
 <h4 id="configurando-o-pino-como-input">Configurando o pino como Input<a class="headerlink" href="#configurando-o-pino-como-input" title="Permanent link">&para;</a></h4>
 <p>Agora é necessário configurarmos o <code>BUT_PIO</code> para gerenciar o <code>BUT_PIO_IDX</code> como uma entrada, para isso usaremos a função <code>pio_set_input()</code> definida na biblioteca da ASF:</p>
@@ -1647,7 +1646,7 @@ conseguimos responder:</p>
 <div class="admonition tip">
 <p class="admonition-title">ul_attribute</p>
 <ul>
-<li>Dica: no <code>ul_attribute</code> utilize o seguinte define: <strong>PIO_DEFAULT</strong>. </li>
+<li>Dica: no <code>ul_attribute</code> utilize o seguinte define: <code>PIO_DEFAULT</code>. </li>
 </ul>
 </div>
 <div class="admonition example">
@@ -1659,17 +1658,13 @@ conseguimos responder:</p>
 </div>
 <h4 id="pull-up">PULL-UP<a class="headerlink" href="#pull-up" title="Permanent link">&para;</a></h4>
 <p>Para esse pino funcionar é necessário que ativemos o <code>pull-up</code> nele. <code>Pull-up</code> é um resistor alimentando para <code>VCC</code>, ele faz com que o valor padrão do pino seja o energizado.</p>
-<p>Para ativarmos o <code>pull-up</code> basta chamar a função: <a href="http://asf.atmel.com/docs/latest/same70/html/group__sam__drivers__pio__group.html#gaa9aa20867544ff93c6527b799b3dfcec"><code>pio_pull_up()</code></a>, detalhada na documentação do ASF.</p>
+<p>Para ativarmos o <code>pull-up</code> basta chamar a função: <a href="http://asf.atmel.com/docs/latest/same70/html/group__sam__drivers__pio__group.html#gaa9aa20867544ff93c6527b799b3dfcec"><code>pio_pull_up()</code></a> com os parâmetros correto. A função está detalhada na documentação do ASF.</p>
 <div class="admonition example">
-<p class="admonition-title">Modifique: <code>init()</code></p>
+<p class="admonition-title">Tarefa: Modifique: <code>init()</code></p>
 <p>Você deve fazer uso da função <code>pio_pull_up()</code> na função <code>init()</code> </p>
 </div>
-<div class="admonition alert">
-<p class="admonition-title">TODO</p>
-<p>INSERIR VÍDEO SOBRE PULLUP </p>
-</div>
 <h3 id="lendo-o-botao">Lendo o botão<a class="headerlink" href="#lendo-o-botao" title="Permanent link">&para;</a></h3>
-<p>Para lermos um valor de um pino, que foi configurado como entrada devemos utilizar alguma das funções fornecidas no ASF de interface com o PIO, procure por ela na documentação:</p>
+<p>Para lermos um valor de um pino, que já foi configurado como entrada, devemos utilizar alguma das funções fornecidas no ASF de interface com o PIO, procure por ela na documentação do PIO.</p>
 <div class="admonition tip">
 <p class="admonition-title">Dicas</p>
 <ul>
@@ -1678,7 +1673,7 @@ conseguimos responder:</p>
 </ul>
 </div>
 <div class="admonition example">
-<p class="admonition-title">Modifique: <code>loop()</code></p>
+<p class="admonition-title">Tarefa: Modifique: <code>loop()</code></p>
 <p>Você deve fazer uso da função <code>pio_get()</code> na função <code>main()</code> para ler o valor de um pino.</p>
 </div>
 <h3 id="implementando-a-logica">Implementando a lógica<a class="headerlink" href="#implementando-a-logica" title="Permanent link">&para;</a></h3>
@@ -1688,7 +1683,7 @@ conseguimos responder:</p>
 </div>
 <h2 id="terminou">Terminou?<a class="headerlink" href="#terminou" title="Permanent link">&para;</a></h2>
 <p>Muito bom! Agora que tal pegar a placa OLED1 (que você recebeu no kit) e usar os LEDs e Botoẽs dela? </p>
-<p>Já da para começar a <a href="IOs-APS">APS 1, que é para 15/3</a>!</p>
+<p>Já da para começar a <a href="IOs-APS">APS 1, que é para 19/3</a>!</p>
                 
                   
                 
