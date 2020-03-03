@@ -823,6 +823,16 @@
 <p>Os periféricos são controlados por registradores. Registradores são pequenas unidades de armazenamento que se comportam como uma memória quando alinhados (bem parecido com elementos, na construção da memória RAM). É pelos registradores que podemos ler e/ou escrever uma informação do periférico.</p>
 <p>Se tiver curiosidade de como esse lab seria realizado para outro uC, de uma lida nesse <a href="https://www.embedded.fm/blog/2016/5/16/ese101-peripherals-part-1">post do EmbeddedFM</a></p>
 <h2 id="registradores">Registradores<a class="headerlink" href="#registradores" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">8. Memory Map and Registers</p>
+<p>Coursera: Embedded Software and Hardware Architecture</p>
+<p><video width="560" height="240" controls>
+<source src="https://d3c33hcgiwev3.cloudfront.net/floDmjm9Eee_aRK4j07i2g.processed/full/360p/index.webm?Expires=1583366400&Signature=AwNH2cqvX-93cAOF~A9a5GV2LHscS-pO7s99Zm-jU9zBKAMwEZokBV0UV6~Wr6~sc58ElGzGgV~UXUWEhKHZ5WTs-IEABo9ZntViczVn8DnNZP152vfgaGr11VYkcby0lqhDD-odZAhYgqTmTIhlp--JvjpAkSKPIdHEIPv9aHM_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A">
+</video> </p>
+<blockquote>
+<p>Fonte: <a href="https://pt.coursera.org/lecture/embedded-software-hardware/8-memory-map-and-registers-aQV4p">https://pt.coursera.org/lecture/embedded-software-hardware/8-memory-map-and-registers-aQV4p</a></p>
+</blockquote>
+</div>
 <p>Os registradores podem ser utilizados no hardware de diversas maneiras: Cada bit do registrador (de 32 bits) pode fazer uma ação diferente no periférico; os 32 bits podem representar um número; cada bit pode configurar uma parte do periférico.</p>
 <p>No caso do PIO temos ao todo 89 registradores, e cada um tem um papel nesse periférico. Na documentação do PIO temos um diagrama que mostra alguns desses registradores e seus papeis no HW:</p>
 <p><img alt="" src="../imgs/IOs/PIO_interno2.png" /></p>

@@ -893,11 +893,12 @@
 <p>O objetivo desse laboratório é o do entendimento das funções utilizadas para configurar o PIO. Como um pino é configurado como saída e entrada? Como o firmware manipula o periférico PIO? Entender o que o PIO é capaz de fazer. Para isso iremos aqui implementar nossas próprias funções de interface com o PIO.</p>
 <ul>
 <li>Ao final do lab, deverão ter implementado as seguintes funções:<ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> _pio_set()</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> _pio_clear()</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> _pio_pull_up()</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> _pio_set_input()</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> _pio_set_output()</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>_pio_set()</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>_pio_clear()</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>_pio_pull_up()</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>_pio_set_input()</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>_pio_set_output()</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>_pio_set_get()</code></li>
 </ul>
 </li>
 </ul>
@@ -932,9 +933,9 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Lembre que essa função serve para acionarmos (colocar <code>1</code>) em um pino digital quando o mesmo é configurado como output</p>
+<p>Lembre que essa função serve para acionarmos (colocar <code>1</code>) em um pino digital quando o mesmo é configurado como output.</p>
 </div>
-<p>Agora será necessário entender como o PIO controla os pinos e o que deve ser feito para que ele atue sobre o pino como desejamos. A parte da secção do manual que fala sobre o PIO e suas saídas/entradas  é a secção 32 do (<code>manual SAME70</code>), vamos analisar:</p>
+<p>Agora será necessário entender como o PIO controla os pinos e o que deve ser feito para que ele atue sobre o pino como desejamos. A parte da secção do manual que fala sobre o PIO e suas saídas/entradas é a <strong>secção 32</strong> do (<code>manual SAME70</code>), vamos analisar:</p>
 <div class="admonition note">
 <p class="admonition-title">SAME70-Manual: 32.5.4 Output Control</p>
 <p>Texto extraído do manual:</p>
@@ -963,11 +964,45 @@
 <p>O que isso significa? Significa que estamos acessando o periférico passado como referência a função (um dos 5 PIOs: <em>PIOA</em>,  <em>PIOB</em>, <em>PIOC</em>, ...) e estamos aplicando a máscara <code>ul_mask</code> no seu registrador <code>PIO_SODR</code>.</p>
 <div class="admonition note">
 <p class="admonition-title"><code>Pio</code> type?</p>
-<p>O tipo <code>Pio</code> é uma struct alinhada com o endereço de memória do periférico</p>
+<p>O tipo <code>Pio</code> é uma struct alinhada com o endereço de memória do periférico, onde cada 'item' dessa struct representa um endereço da memória do periférico, essa é a maneira correta em <code>C</code> de darmos <em>nome</em> a endereços de memória.</p>
+<p>Isso já está definido no projeto (para facilitar):</p>
+<p>O <code>PIOA</code> é um struct que aponta para o endereço <code>0x400E0E00</code></p>
+<div class="codehilite"><pre><span></span><span class="cp">#define PIOA   ((Pio    *)0x400E0E00U) </span><span class="cm">/**&lt; \brief (PIOA  ) Base Address */</span><span class="cp"></span>
+</pre></div>
+
+<p>O struct possui a seguinte estrutura:</p>
+<div class="codehilite"><pre><span></span>  <span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+<span class="n">__O</span>  <span class="kt">uint32_t</span> <span class="n">PIO_PER</span><span class="p">;</span>       <span class="cm">/**&lt; \brief (Pio Offset: 0x0000) PIO Enable Register */</span>
+<span class="n">__O</span>  <span class="kt">uint32_t</span> <span class="n">PIO_PDR</span><span class="p">;</span>       <span class="cm">/**&lt; \brief (Pio Offset: 0x0004) PIO Disable Register */</span>
+<span class="n">__I</span>  <span class="kt">uint32_t</span> <span class="n">PIO_PSR</span><span class="p">;</span>       <span class="cm">/**&lt; \brief (Pio Offset: 0x0008) PIO Status Register */</span>
+<span class="n">__I</span>  <span class="kt">uint32_t</span> <span class="n">Reserved1</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="n">__O</span>  <span class="kt">uint32_t</span> <span class="n">PIO_OER</span><span class="p">;</span>       <span class="cm">/**&lt; \brief (Pio Offset: 0x0010) Output Enable Register */</span>
+<span class="n">__O</span>  <span class="kt">uint32_t</span> <span class="n">PIO_ODR</span><span class="p">;</span>       <span class="cm">/**&lt; \brief (Pio Offset: 0x0014) Output Disable Register */</span>
+<span class="n">__I</span>  <span class="kt">uint32_t</span> <span class="n">PIO_OSR</span><span class="p">;</span>       <span class="cm">/**&lt; \brief (Pio Offset: 0x0018) Output Status Register */</span>
+<span class="n">__I</span>  <span class="kt">uint32_t</span> <span class="n">Reserved2</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="n">__O</span>  <span class="kt">uint32_t</span> <span class="n">PIO_IFER</span><span class="p">;</span>      <span class="cm">/**&lt; \brief (Pio Offset: 0x0020) Glitch Input Filter Enable Register */</span>
+<span class="n">__O</span>  <span class="kt">uint32_t</span> <span class="n">PIO_IFDR</span><span class="p">;</span>      <span class="cm">/**&lt; \brief (Pio Offset: 0x0024) Glitch Input Filter Disable Register */</span>
+</pre></div>
+
+<p>Onde: <code>O,I</code> são macros que bloqueiam os endereçós para:</p>
+<ul>
+<li><code>__O</code> : Apenas escrita</li>
+<li><code>__I</code> : Apenas Leitura</li>
+<li><code>__IO</code> : Apenas Leitura</li>
+</ul>
+<div class="codehilite"><pre><span></span>  <span class="cp">#ifdef __cplusplus</span>
+    <span class="cp">#define   __I     volatile        </span><span class="cm">/*!&lt; Defines &#39;read only&#39; permissions                 */</span><span class="cp"></span>
+  <span class="cp">#else</span>
+    <span class="cp">#define   __I     volatile const  </span><span class="cm">/*!&lt; Defines &#39;read only&#39; permissions                 */</span><span class="cp"></span>
+  <span class="cp">#endif</span>
+    <span class="cp">#define   __O     volatile        </span><span class="cm">/*!&lt; Defines &#39;write only&#39; permissions                */</span><span class="cp"></span>
+    <span class="cp">#define   __IO    volatile        </span><span class="cm">/*!&lt; Defines &#39;read / write&#39; permissions              */</span><span class="cp"></span>
+</pre></div>
+
 </div>
 <div class="admonition example">
 <p class="admonition-title">Modifique e teste</p>
-<p>A função está pronta, agora precisamos testar. Com a modificação no código faça a gravação do uC e nada deve mudar na execução do código. Já que a função implementada possui a mesma funcionalidade daquela fornecida pelo Atmel.</p>
+<p>A função está pronta, agora precisamos testar. Com a modificação no código faça a gravação do uC e nada deve mudar na execução do código. Já que a função implementada possui a mesma funcionalidade daquela fornecida pelo fabricante.</p>
 <ul>
 <li>Embarque o código e o mesmo deve funcionar normalmente caso a função implementada esteja correta.</li>
 </ul>
@@ -991,8 +1026,12 @@
 <p>Vocês deverão descobrir pelo manual qual o periférico que deve ser acessado. Releia a secção 32.5.4</p>
 <div class="admonition example">
 <p class="admonition-title">Modifique e teste</p>
-<p>Teste a função implementada substituindo a função <strong>pio_clear()</strong> pela função <strong>_pio_clear()</strong> e embarque o código. Ele deve se comportar igual.
-- Embarque o código e o mesmo deve funcionar normalmente caso a função implementada esteja correta.</p>
+<ul>
+<li><code>%s/pio_clea/_pio_clear/g</code></li>
+<li>Implemente</li>
+<li>Compile e programe</li>
+<li>Embarque e teste</li>
+</ul>
 </div>
 <h3 id="_pio_pull_up">_pio_pull_up(...)<a class="headerlink" href="#_pio_pull_up" title="Permanent link">&para;</a></h3>
 <p>Vamos implementar uma função que faz a configuração do <code>pullup</code> nos pinos do PIO, esse pullup é utilizado no botão da placa. Para isso declare a função a seguir:</p>
@@ -1010,14 +1049,20 @@
  <span class="p">}</span>
 </pre></div>
 
-<p>Essa função recebe o PIO que irá configurar, os pinos que serão configurados e como último parâmetro se o pullup estará ativado (1) ou desativado (0). Para implementar leia <strong>a secção 32.5.1</strong>.</p>
-<blockquote>
-<p>Teste a função implementada substituindo a função <strong>pio_pull_up()</strong> pela função <strong>_pio_pull_up()</strong> e embarque o código. Ele deve se comportar igual.</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><span class="gi">+ Embarque o código e o mesmo deve funcionar normalmente caso</span>
-<span class="gi">+ a função implementada esteja correta.</span>
-</pre></div>
-
+<p>Essa função recebe o PIO que irá configurar, os pinos que serão configurados e como último parâmetro se o pullup estará ativado (1) ou desativado (0). </p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Leia o manual do PIO, especificamente <strong>a secção 32.5.1</strong>.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Modifique e teste</p>
+<ul>
+<li><code>%s/pio_pull_up/_pio_pull_up/g</code></li>
+<li>Implemente</li>
+<li>Compile e programe</li>
+<li>Embarque e Teste</li>
+</ul>
+</div>
 <h3 id="_pio_set_input">_pio_set_input(...)<a class="headerlink" href="#_pio_set_input" title="Permanent link">&para;</a></h3>
 <p>Agora vamos criar uma nova função para configurar um pino como entrada, para isso inclua os seguintes defines que serão utilizados como forma de configuração da função:</p>
 <div class="codehilite"><pre><span></span><span class="cm">/*  Default pin configuration (no attribute). */</span>
@@ -1049,9 +1094,6 @@
 <span class="p">}</span>
 </pre></div>
 
-<blockquote>
-<p>Leia a secção do <code>datasheet 32.5.9</code> para verificar os registradores necessários para implementar a função. </p>
-</blockquote>
 <p>Para testar essa função substitua o seguinte trecho de código que configura um pino como entrada + o pull-up</p>
 <div class="codehilite"><pre><span></span><span class="n">pio_set_input</span><span class="p">(</span><span class="n">BUT_PIO</span><span class="p">,</span> <span class="n">BUT_PIO_MASK</span><span class="p">,</span> <span class="n">_PIO_DEFAULT</span><span class="p">);</span>
 <span class="n">_pio_pull_up</span><span class="p">(</span><span class="n">BUT_PIO</span><span class="p">,</span> <span class="n">BUT_PIN_MASK</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
@@ -1061,10 +1103,23 @@
 <div class="codehilite"><pre><span></span><span class="n">_pio_set_input</span><span class="p">(</span><span class="n">BUT_PIO</span><span class="p">,</span> <span class="n">BUT_PIO_MASK</span><span class="p">,</span> <span class="n">_PIO_PULLUP</span><span class="p">);</span>
 </pre></div>
 
-<div class="codehilite"><pre><span></span><span class="gi">+ Embarque o código e o mesmo deve funcionar normalmente caso</span>
-<span class="gi">+ a função implementada esteja correta.</span>
-</pre></div>
-
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Leia o manual do PIO, especificamente <strong>a secção 32.5.9</strong>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Utilize a função já implementada <code>_pio_pull_up()</code></p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Tarefa: Modifique e teste</p>
+<ul>
+<li><code>%s/pio_set_input/_pio_set_input/g</code></li>
+<li>Implemente</li>
+<li>Compile e programe</li>
+<li>Embarque e Teste</li>
+</ul>
+</div>
 <h3 id="_pio_set_output">_pio_set_output(...)<a class="headerlink" href="#_pio_set_output" title="Permanent link">&para;</a></h3>
 <p>Na aula passada utilizamos a função <code>pio_set_output</code> para configurarmos que o pino é uma saída. Iremos aqui definir uma nova função chamada de <code>_pio_set_output()</code> que implementa essa função.</p>
 <p>Defina no seu código a função a seguir:</p>
@@ -1108,7 +1163,7 @@
 </ul>
 </li>
 <li>
-<p>Definir a saída inicial do pino (1 ou 0)</p>
+<p>Definir a saída inicial do pino (<code>1</code> ou <code>0</code>)</p>
 <ul>
 <li>aqui você pode fazer uso das duas funções recentes implementadas. </li>
 </ul>
@@ -1129,11 +1184,21 @@
 <blockquote>
 <p>Uma vez implementada a função, utilize ela no seu código substituindo a função <code>pio_set_output()</code> por essa função <code>_pio_set_output()</code>. Teste se o LED continua funcionando, se continuar quer dizer que sua função foi executada com sucesso.</p>
 </blockquote>
-<div class="codehilite"><pre><span></span><span class="gi">+ Embarque o código e o mesmo deve funcionar normalmente caso</span>
-<span class="gi">+ a função implementada esteja correta.</span>
-</pre></div>
-
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Utilize as funções já implementada <code>_pio_set()</code>, <code>_pio_clear()</code>, <code>_pio_pull_up()</code></p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Tarefa: Modifique e teste</p>
+<ul>
+<li><code>%s/pio_set_output/_pio_set_output/g</code></li>
+<li>Implemente</li>
+<li>Compile e programe</li>
+<li>Embarque e Teste</li>
+</ul>
+</div>
 <h3 id="_pio_get">_pio_get(...)<a class="headerlink" href="#_pio_get" title="Permanent link">&para;</a></h3>
+<p>Implemente a função <code>_pio_get()</code>:</p>
 <div class="codehilite"><pre><span></span>/**
  * \brief Return 1 if one or more PIOs of the given Pin instance currently have
  * a high level; otherwise returns 0. This method returns the actual value that
@@ -1151,6 +1216,19 @@ uint32_t pio_get(Pio *p_pio, const pio_type_t ul_type,
         const uint32_t ul_mask)
 {}
 </pre></div>
+
+<p>!!! <code>ul_type</code>
+    - <code>PIO_INPUT</code>: quando for para ler uma <code>entrada</code>
+    - <code>PIO_OUTPUT_0</code>: quando for para ler uma <code>saida</code></p>
+<div class="admonition example">
+<p class="admonition-title">Tarefa: Modifique e teste</p>
+<ul>
+<li><code>%s/pio_set_input/_pio_set_input/g</code></li>
+<li>Implemente</li>
+<li>Compile e programe</li>
+<li>Embarque e Teste</li>
+</ul>
+</div>
                 
                   
                 
