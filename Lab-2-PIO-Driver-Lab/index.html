@@ -1071,8 +1071,6 @@
 <span class="cp">#define _PIO_PULLUP              (1u &lt;&lt; 0)</span>
 <span class="cm">/*  The internal glitch filter is active. */</span>
 <span class="cp">#define _PIO_DEGLITCH            (1u &lt;&lt; 1)</span>
-<span class="cm">/*  The pin is open-drain. */</span>
-<span class="cp">#define _PIO_OPENDRAIN           (1u &lt;&lt; 2)</span>
 <span class="cm">/*  The internal debouncing filter is active. */</span>
 <span class="cp">#define _PIO_DEBOUNCE            (1u &lt;&lt; 3)</span>
 </pre></div>
@@ -1099,8 +1097,8 @@
 <span class="n">_pio_pull_up</span><span class="p">(</span><span class="n">BUT_PIO</span><span class="p">,</span> <span class="n">BUT_PIN_MASK</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 </pre></div>
 
-<p>Para :</p>
-<div class="codehilite"><pre><span></span><span class="n">_pio_set_input</span><span class="p">(</span><span class="n">BUT_PIO</span><span class="p">,</span> <span class="n">BUT_PIO_MASK</span><span class="p">,</span> <span class="n">_PIO_PULLUP</span><span class="p">);</span>
+<p>Para:</p>
+<div class="codehilite"><pre><span></span><span class="n">_pio_set_input</span><span class="p">(</span><span class="n">BUT_PIO</span><span class="p">,</span> <span class="n">BUT_PIO_MASK</span><span class="p">,</span> <span class="n">_PIO_PULLUP</span> <span class="o">|</span> <span class="n">_PIO_DEBOUNCE</span><span class="p">);</span>
 </pre></div>
 
 <div class="admonition info">
