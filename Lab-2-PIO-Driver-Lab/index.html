@@ -1063,7 +1063,7 @@
 <div class="admonition example">
 <p class="admonition-title">Modifique e teste</p>
 <ul>
-<li><code>%s/pio_clea/_pio_clear/g</code></li>
+<li><code>%s/pio_clear/_pio_clear/g</code></li>
 <li>Implemente</li>
 <li>Compile e programe</li>
 <li>Embarque e teste</li>
@@ -1251,9 +1251,13 @@ uint32_t pio_get(Pio *p_pio, const pio_type_t ul_type,
 {}
 </pre></div>
 
-<p>!!! note <code>ul_type</code>
-    - <code>PIO_INPUT</code>: quando for para ler uma <code>entrada</code>
-    - <code>PIO_OUTPUT_0</code>: quando for para ler uma <code>saida</code></p>
+<div class="admonition note">
+<p class="admonition-title">ul_type</p>
+<ul>
+<li><code>PIO_INPUT</code>: quando for para ler uma <code>entrada</code></li>
+<li><code>PIO_OUTPUT_0</code>: quando for para ler uma <code>saida</code></li>
+</ul>
+</div>
 <div class="admonition example">
 <p class="admonition-title">Tarefa: Modifique e teste</p>
 <ul>
