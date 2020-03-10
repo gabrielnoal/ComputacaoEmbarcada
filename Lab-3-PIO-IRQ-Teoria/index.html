@@ -966,8 +966,7 @@ dos núcleos de um processador multicore ou a detecção de um overflow de
 memória são exemplos eventos interno ao CORE (processador). Já a
 notificação de um novo pacote oriundo da comunicação Ethernet é um
 exemplo de um evento externo ao CORE.</p>
-<p>A estruturação de um programa orientada a eventos[^1] dá uma série de
-vantagens ao programador :</p>
+<p>A estruturação de um programa orientada a eventos<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> dá uma série de vantagens ao programador:</p>
 <ol>
 <li>
 <p>independência entre as diferentes partes do programador</p>
@@ -1040,12 +1039,9 @@ fim de executar essas operações, o que ele faz constantemente é:</p>
 </ol>
 <p>O CORE Cortex M7 com ponto flutuante operando a 300MHz fica realizado
 uma simples ação de comparar o valor de um registrador com uma máscara
-para detectarmos uma mudança no botão, bem ineficiente né?! </p>
-<p>E se, o código fosse alertado
-dessa alteração e uma função específica chamada para tratar essa mudança
-? O CORE poderia estar em um modo de baixo consumo energético (<code>sleep
-mode</code>) e configurado para acordar na vinda do determinado evento (exe.
-mudança de estado do botão).</p>
+para detectarmos uma mudança no botão. E se, o código fosse alertado
+dessa alteração e uma função específica chamada para tratar essa mudança? O CORE poderia estar em um modo de baixo consumo energético (sleep
+mode) e configurado para acordar dado um determinado evento (ex:mudança de estado do botão).</p>
 <p>Deve-se ponderar a utilização do modo de baixo consumo energético já que
 esse tipo de ação (sleep mode -> wakeup) implica em um atraso entre o
 evento e a retomada plena do CORE e início da execução do código. Esse
@@ -1086,7 +1082,7 @@ conectado.</p>
 </pre></div>
 
 <h2 id="excecoes">Exceções<a class="headerlink" href="#excecoes" title="Permanent link">&para;</a></h2>
-<p>Exceções [^2] são eventos que causam uma mudança no fluxo de execução do
+<p>Exceções <sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> são eventos que causam uma mudança no fluxo de execução do
 programa, quando ocorridas levam a unidade de processamento a
 executar uma parte específica do código chamada de: <strong>exception
 handler</strong>. Depois do término da execução da exceção o programa principal
@@ -1156,7 +1152,7 @@ serão as interrupções que estarão ativas.</p>
 <p>Além de ativarmos a interrupção do periférico específico, precisamos
 definir sua prioridade. Na inicialização do uC o ARM configura todas as
 prioridades para o nível 0 (mais alto). Esse controle é realizado via
-acesso aos registradores especiais do NVIC, especificamente o .</p>
+acesso aos registradores especiais do NVIC, especificamente o IRQ.</p>
 <h4 id="sinais-de-interrupcao-vindo-dos-perifericos">Sinais de interrupção vindo dos periféricos<a class="headerlink" href="#sinais-de-interrupcao-vindo-dos-perifericos" title="Permanent link">&para;</a></h4>
 <p>Os periféricos geram um sinal de interrupção para o NVIC, esse sinal
 fica ativo até ser limpo manualmente pelo CORE e é utilizado pelo NVIC a
@@ -1218,7 +1214,7 @@ não seja chamada novamente quando a interrupção acabar de ser executada.</p>
 </ul>
 <h2 id="software-cmsis">Software - CMSIS<a class="headerlink" href="#software-cmsis" title="Permanent link">&para;</a></h2>
 <p>Utilizaremos as funções definidas no <strong>Cortex Microcontroller Software
-Interface Standard</strong> (CMSIS) [^3] para configurar o NVIC e o CORE, essas
+Interface Standard</strong> (CMSIS) <sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup> para configurar o NVIC e o CORE, essas
 funções são de uso geral do ARM Cortex e são independentes do fabricante
 (Atmel, Texas, ...).</p>
 <p>As funções utilizadas serão :</p>
@@ -1301,11 +1297,23 @@ even if some read accesses in PIO_ISR are performed.</p>
 <p><img alt="Detecção de eventos *SAME70 Datasheet*" src="../imgs/PIO-IRQ/eventDetector.png" /></p>
 </div>
 <h2 id="referencias">Referências<a class="headerlink" href="#referencias" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="https://en.wikipedia.org/wiki/Event-driven_programming">https://en.wikipedia.org/wiki/Event-driven_programming</a></li>
-<li><a href="https://www.ece.umd.edu/class/enee447.S2016/ARM-Documentation/ARM-Interrupts-1.pdf">https://www.ece.umd.edu/class/enee447.S2016/ARM-Documentation/ARM-Interrupts-1.pdf</a></li>
-<li><a href="http://www.arm.com/products/processors/cortex-m/cortex-microcontroller-software-interface-standard.php">http://www.arm.com/products/processors/cortex-m/cortex-microcontroller-software-interface-standard.php</a></li>
-</ul>
+<p>[1] <a href="https://en.wikipedia.org/wiki/Event-driven_programming">https://en.wikipedia.org/wiki/Event-driven_programming</a></p>
+<p>[2] <a href="https://www.ece.umd.edu/class/enee447.S2016/ARM-Documentation/ARM-Interrupts-1.pdf">https://www.ece.umd.edu/class/enee447.S2016/ARM-Documentation/ARM-Interrupts-1.pdf</a></p>
+<p>[3] <a href="http://www.arm.com/products/processors/cortex-m/cortex-microcontroller-software-interface-standard.php">http://www.arm.com/products/processors/cortex-m/cortex-microcontroller-software-interface-standard.php</a></p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p><a href="https://en.wikipedia.org/wiki/Event-driven_programming">https://en.wikipedia.org/wiki/Event-driven_programming</a>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p><a href="https://www.ece.umd.edu/class/enee447.S2016/ARM-Documentation/ARM-Interrupts-1.pdf">https://www.ece.umd.edu/class/enee447.S2016/ARM-Documentation/ARM-Interrupts-1.pdf</a>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p><a href="http://www.arm.com/products/processors/cortex-m/cortex-microcontroller-software-interface-standard.php">http://www.arm.com/products/processors/cortex-m/cortex-microcontroller-software-interface-standard.php</a>&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
                 
                   
                 
