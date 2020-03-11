@@ -36,7 +36,7 @@
     
     
       
-        <title>Laboratório 3 - PIO - IRQ - 5s - Computação Embarcada</title>
+        <title>PIO - IRQ - 5s - Computação Embarcada</title>
       
     
     
@@ -87,7 +87,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#laboratorio-3-pio-irq" tabindex="1" class="md-skip">
+      <a href="#pio-irq" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -113,7 +113,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Laboratório 3 - PIO - IRQ
+                PIO - IRQ
               
             </span>
           
@@ -472,11 +472,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
-        Laboratório 3 - PIO - IRQ
+        PIO - IRQ
       </label>
     
-    <a href="./" title="Laboratório 3 - PIO - IRQ" class="md-nav__link md-nav__link--active">
-      Laboratório 3 - PIO - IRQ
+    <a href="./" title="PIO - IRQ" class="md-nav__link md-nav__link--active">
+      PIO - IRQ
     </a>
     
       
@@ -490,19 +490,19 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#bordas" class="md-nav__link">
-    Bordas
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#melhorando-o-exemplo" class="md-nav__link">
     Melhorando o exemplo
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bordas" class="md-nav__link">
+    Bordas
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#irq-keep-it-short-and-simple" class="md-nav__link">
@@ -533,8 +533,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#asf" class="md-nav__link">
-    ASF
+  <a href="#adicionando-lowpower-mode-asf-wizard" class="md-nav__link">
+    Adicionando lowpower mode (ASF Wizard)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrando-em-lowpower" class="md-nav__link">
+    Entrando em lowpower
   </a>
   
 </li>
@@ -546,6 +553,13 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#codigo-exemplo-oled" class="md-nav__link">
+    Código exemplo OLED
+  </a>
   
 </li>
       
@@ -566,8 +580,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../Lab-3-PIO-IRQ-Perguntas/" title="Lab 3 PIO IRQ Perguntas" class="md-nav__link">
-      Lab 3 PIO IRQ Perguntas
+    <a href="../Lab-3-PIO-IRQ-Perguntas/" title="PIO - IRQ - Perguntas" class="md-nav__link">
+      PIO - IRQ - Perguntas
     </a>
   </li>
 
@@ -838,19 +852,19 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#bordas" class="md-nav__link">
-    Bordas
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#melhorando-o-exemplo" class="md-nav__link">
     Melhorando o exemplo
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bordas" class="md-nav__link">
+    Bordas
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#irq-keep-it-short-and-simple" class="md-nav__link">
@@ -881,8 +895,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#asf" class="md-nav__link">
-    ASF
+  <a href="#adicionando-lowpower-mode-asf-wizard" class="md-nav__link">
+    Adicionando lowpower mode (ASF Wizard)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrando-em-lowpower" class="md-nav__link">
+    Entrando em lowpower
   </a>
   
 </li>
@@ -894,6 +915,13 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#codigo-exemplo-oled" class="md-nav__link">
+    Código exemplo OLED
+  </a>
   
 </li>
       
@@ -916,7 +944,7 @@
                   <a href="https://github.com/Insper/ComputacaoEmbarcada/edit/master/docs-src/Lab-3-PIO-IRQ-Lab.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="laboratorio-3-pio-irq">Laboratório 3 - PIO - IRQ<a class="headerlink" href="#laboratorio-3-pio-irq" title="Permanent link">&para;</a></h1>
+                <h1 id="pio-irq">PIO - IRQ<a class="headerlink" href="#pio-irq" title="Permanent link">&para;</a></h1>
 <table>
 <thead>
 <tr>
@@ -942,16 +970,20 @@
 </li>
 </ul>
 <p>O código exemplo <a href="https://github.com/Insper/SAME70-examples/tree/master/Perifericos-uC/PIO-IRQ"><code>SAME70-exemples/PIO-IRQ</code></a> demonstra como configurar o botão da placa e utilizar a interrupção em um pino do PIO. Vamos trabalhar com esse código de base para esse laboratório.</p>
-<div class="admonition note">
+<div class="admonition example">
 <p class="admonition-title">Entenda e execute</p>
-</div>
 <ol>
-<li>Copie esse exemplo para a pasta do seu repositório.</li>
-<li>Leia o <a href="https://github.com/Insper/SAME70-examples/blob/master/Perifericos-uC/PIO-IRQ/README.md">README</a> desse exemplo!<ol>
+<li>Copie <a href="https://github.com/Insper/SAME70-examples/tree/master/Perifericos-uC/PIO-IRQ">esse exemplo (SAME70-examples/PIO-IRQ)</a> para a pasta do seu repositório.</li>
+<li>Estude o <a href="https://github.com/Insper/SAME70-examples/blob/master/Perifericos-uC/PIO-IRQ/README.md">README</a> desse exemplo!</li>
 <li>Execute o exemplo na placa!</li>
 </ol>
-</li>
-</ol>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Não continue sem ter feito a etapa anterior</p>
+</div>
+<h2 id="melhorando-o-exemplo">Melhorando o exemplo<a class="headerlink" href="#melhorando-o-exemplo" title="Permanent link">&para;</a></h2>
+<p>Vamos entender melhor e melhorar o código fornecido.</p>
 <h3 id="bordas">Bordas<a class="headerlink" href="#bordas" title="Permanent link">&para;</a></h3>
 <p>Vamos agora modificar o código um pouco, o exemplo está funcionando com interrupção em borda de descida no pino, vamos modificar para ele operar com borda de subida.</p>
 <div class="admonition example">
@@ -961,49 +993,47 @@
 <li>Teste na placa.</li>
 </ol>
 </div>
-<h2 id="melhorando-o-exemplo">Melhorando o exemplo<a class="headerlink" href="#melhorando-o-exemplo" title="Permanent link">&para;</a></h2>
-<p>Vamos entender melhor e melhorar o código fornecido.</p>
 <h3 id="irq-keep-it-short-and-simple">IRQ - Keep it short and simple<a class="headerlink" href="#irq-keep-it-short-and-simple" title="Permanent link">&para;</a></h3>
 <p>O tempo que um uC deve ficar na interrupção deve ser o mais rápido possível, não é uma boa prática gastar muito tempo dentro de uma interrupção, a interrupção só deve executar códigos críticos o resto deve ser processado no loop principal (<code>while(1)</code>) pelos principais motivos a seguir:</p>
 <ol>
-<li>Outras interrupções de mesma prioridade irão aguardar o retorno da interrupção. O projeto deixará de servir de maneira rápida a uma interrupção se ficar muito tempo nela.</li>
+<li>Outras interrupções de mesma prioridade irão aguardar o retorno da interrupção. O firmware irá deixará de servir de maneira rápida a diferentes interrupções se gastar tempo nelas.</li>
 <li>Nem todas as funções são reentrantes. Funções como <code>printf</code> podem não operar corretamente dentro de interrupções (mais de uma chamada por vez).</li>
 <li>RTOS: As tarefas devem ser executadas em tasks e não nas interrupções, possibilitando assim um maior controle do fluxo de execução do firmware (vamos ver isso mais para frente).</li>
 </ol>
 <h4 id="flag">FLAG<a class="headerlink" href="#flag" title="Permanent link">&para;</a></h4>
-<p>A solução a esse problema é sempre que possível devemos realizar o processamento de uma interrupção no loop principal, essa abordagem é muito utilizada em sistemas embarcados. E deve ser feita da forma a seguir:</p>
+<p>A solução a esse problema é realizar o processamento de uma interrupção no loop principal (<code>while(1)</code>), essa abordagem é muito utilizada em sistemas embarcados. E deve ser feita da forma a seguir:</p>
 <ul>
-<li>Define-se uma variável global que servirá como <code>flag</code> (<code>true</code> ou <code>false</code>)</li>
+<li>Define-se uma variável global que servirá como <code>flag</code> (<code>true</code> ou <code>false</code>) (<strong>essa variável precisa ser do tipo <code>volatile</code></strong>)</li>
 <li>Interrupção muda status da <code>flag</code></li>
 <li><code>while(1)</code> verifica status da <code>flag</code> para realizar ação.</li>
 <li><code>while(1)</code> zera <code>flag</code> (acknowledge) </li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="k">volatile</span> <span class="n">Bool</span> <span class="n">but_flag</span><span class="p">;</span>
+<p>Exemplo</p>
+<div class="codehilite"><pre><span></span><span class="cm">/* flag */</span>
+<span class="k">volatile</span> <span class="kt">char</span> <span class="n">but_flag</span><span class="p">;</span>
 
+<span class="cm">/* funcao de callback/ Handler */</span>
 <span class="kt">void</span> <span class="nf">but_callBack</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
- <span class="n">but_flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+ <span class="n">but_flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-  <span class="c1">// ...</span>
-  <span class="c1">// inicializacao</span>
+  <span class="cm">/* inicializacao */</span>
 
   <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
 
    <span class="c1">// trata interrupção do botão</span>
    <span class="k">if</span><span class="p">(</span><span class="n">but_flag</span><span class="p">){</span>
-     <span class="c1">// código</span>
-     <span class="c1">// ...</span>
-
+     <span class="cm">/* ....   */</span>
      <span class="c1">// zera flag</span>
-     <span class="n">but_flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+     <span class="n">but_flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
    <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 
 <div class="admonition note">
-<p class="admonition-title">O que é volatile</p>
+<p class="admonition-title">volatile</p>
 <p>Sempre que uma interrupção alterar uma variável global, essa deve possuir o 'pragma' (modificador) <a href="https://barrgroup.com/Embedded-Systems/How-To/C-Volatile-Keyword"><code>volatile</code></a>. Exemplo: <code>volatile int valADC;</code>. Esse pragma serve para informar o compilador (no nosso caso GCC) que essa variável será modificada sem que ele saiba. </p>
 <p>Compiladores são projetados para otimizar nosso código e remover trechos ou variáveis desnecessárias. Como a função de <code>Handler</code> (interrupção) nunca é chamada diretamente pelo programa, o compilador pode achar que essa função não vai ser executada nunca e pode optimizar a variável que nela seria atualizada (já que não é chamada diretamente!). </p>
 <ul>
@@ -1013,8 +1043,11 @@
 <div class="admonition example">
 <p class="admonition-title">Modifique e teste</p>
 <ol>
-<li>Modifique o exemplo para trabalhar com flag. Note que será interessante criar um nova função chamada de <code>pisca_led()</code>, que será chamada para piscar o LED.</li>
-<li>Teste no HW</li>
+<li>Modifique o exemplo para piscar o led no <code>while(1)</code> utilizando <code>flag</code> vindo da interrupção. <ul>
+<li>Dentro do callback do botão não pode ter a função <code>pisca_led</code>!</li>
+</ul>
+</li>
+<li>Programe e teste no HW</li>
 </ol>
 </div>
 <h3 id="low-power-modes">Low power modes<a class="headerlink" href="#low-power-modes" title="Permanent link">&para;</a></h3>
@@ -1023,7 +1056,7 @@
 <li>Responder imediato a um evento </li>
 <li>Possibilitar o uC entrar em modos de baixo gasto energético (<code>sleep modes</code>).</li>
 </ol>
-<p>Cada uC possui seus modos de baixo consumo energético, no caso do uC utilizado no curso são 4 modos distintos de operação, cada um com sua vantagem / desvantagem.</p>
+<p>No caso do uC utilizado no curso são 4 modos distintos de lowpower, cada um com sua vantagem / desvantagem.</p>
 <ul>
 <li>
 <p>Active Mode: Active mode is the normal running mode with the core clock running from the fast RC oscillator, the main crystaloscillator or the PLLA. The Power Management Controller can be used to adapt the core, bus and peripheral frequencies and to enable and/or disable the peripheral clocks.</p>
@@ -1041,13 +1074,23 @@
 <div class="admonition note">
 <p>Mais informações na secção 6.6 do datasheet</p>
 </div>
-<h4 id="asf">ASF<a class="headerlink" href="#asf" title="Permanent link">&para;</a></h4>
+<div class="admonition note">
+<p class="admonition-title">Informações importantes</p>
+<ul>
+<li>Não é qualquer interrupção que consegue tirar o uC de modos de sleep mais profundos</li>
+<li>Quanto mais profundo o sleep, mais tempo o uC leva para 'acordar'</li>
+<li>Alguns modos podem perder informações da memória RAM</li>
+</ul>
+<p><img alt="" src="../imgs/PIO-IRQ/lowpower-table.png" /></p>
+</div>
+<h4 id="adicionando-lowpower-mode-asf-wizard">Adicionando lowpower mode (ASF Wizard)<a class="headerlink" href="#adicionando-lowpower-mode-asf-wizard" title="Permanent link">&para;</a></h4>
 <p>Para termos acesso as funções da atmel que lidam com o <code>sleep mode</code> devemos adicionar a biblioteca no Atmel Studio:</p>
 <ul>
 <li><code>ASF</code> <img alt="➡" class="emojione" src="https://cdn.jsdelivr.net/emojione/assets/svg/27a1.svg" title=":arrow_right:" /> <code>ASF Wizard</code> <img alt="➡" class="emojione" src="https://cdn.jsdelivr.net/emojione/assets/svg/27a1.svg" title=":arrow_right:" /> </li>
 </ul>
 <p>Agora basta adicionar a biblioteca <strong>Sleep manager (service)</strong> ao projeto.</p>
-<p>Agora podemos usar as funções de low power, primeiramente iremos utilizar somente o modo <code>sleep mode</code> via a chamada da função a seguir:</p>
+<h4 id="entrando-em-lowpower">Entrando em lowpower<a class="headerlink" href="#entrando-em-lowpower" title="Permanent link">&para;</a></h4>
+<p>Agora podemos usar as funções de low power, primeiramente iremos utilizar somente o modo <code>sleep mode</code> via a chamada da função <code>pmc_sleep()</code> conforme exemplo a seguir:</p>
 <div class="codehilite"><pre><span></span><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span> 
   <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
      <span class="c1">// Entra em sleep mode</span>
@@ -1065,10 +1108,10 @@
 <p class="admonition-title">Modifique e teste</p>
 <ol>
 <li>Modifique o exemplo para entrar em modo sleep</li>
-<li>Teste no HW</li>
+<li>Programe e teste no HW</li>
 </ol>
 </div>
-<h1 id="codigo-exemplo-oled">Código exemplo OLED<a class="headerlink" href="#codigo-exemplo-oled" title="Permanent link">&para;</a></h1>
+<h2 id="codigo-exemplo-oled">Código exemplo OLED<a class="headerlink" href="#codigo-exemplo-oled" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -1111,7 +1154,7 @@
 <ul>
 <li>Faça os LEDs piscarem com o <a href="https://github.com/Insper/SAME70-examples/tree/master/Perifericos-uC/TC-RTC-IRQ/TC-RTC-IRQ">TimerCounter</a>!</li>
 <li>Faça um gráfico temporal da frequência do LED</li>
-<li>Entre em um modo de slep mais profundo</li>
+<li>Entre em um modo de sleep mais profundo</li>
 </ul>
 </div>
                 
@@ -1149,13 +1192,13 @@
           </a>
         
         
-          <a href="../Lab-3-PIO-IRQ-Perguntas/" title="Lab 3 PIO IRQ Perguntas" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../Lab-3-PIO-IRQ-Perguntas/" title="PIO - IRQ - Perguntas" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Lab 3 PIO IRQ Perguntas
+                PIO - IRQ - Perguntas
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
