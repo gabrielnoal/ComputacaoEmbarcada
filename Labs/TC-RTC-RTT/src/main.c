@@ -122,6 +122,16 @@ volatile char flag_tc_4hz = 0;
 volatile char flag_tc_5hz = 0;
 volatile char flag_rtc = 0;
 volatile char flag_rtt = 0;
+volatile char string[10];
+volatile int seconds = 0;
+volatile int secondsDozen = 0;
+
+volatile int minutes = 0;
+volatile int minutesDozen = 0;
+
+volatile int hours = 0;
+volatile int hoursDozen = 0;
+
 
 /************************************************************************/
 /* prototypes                                                           */
@@ -131,11 +141,14 @@ void init(void);
 void configureLeds(component leds[], int size);
 void eneblePioPeriph(int periphIdsList[], int size);
 void TC_init(Tc * TC, int ID_TC, int TC_CHANNEL, int freq);
-void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type);
+static void RTT_init(uint16_t pllPreScale, uint32_t IrqNPulses);
+void RTC_init(Rtc *rtc, uint32_t id_rtc, uint32_t irq_type);
 void turnOffLED(component led);
 void turnOnLED(component led);
-void writeLCD(char string[128]);
+void writeLCD();
 void pisca_led(int n, int t, component led);
+void pin_toggle(component led);
+void updateTime(void);
 
 /************************************************************************/
 /* interrupcoes                                                         */
@@ -187,10 +200,32 @@ void RTC_Handler(void)
       flag_rtc = 1;
 	}
 	
+	if ((ul_status & RTC_SR_SEC) == RTC_SR_SEC) {
+		updateTime();
+		rtc_clear_status(RTC, RTC_SCCR_SECCLR);
+	}
+	
 	rtc_clear_status(RTC, RTC_SCCR_ACKCLR);
 	rtc_clear_status(RTC, RTC_SCCR_TIMCLR);
 	rtc_clear_status(RTC, RTC_SCCR_CALCLR);
 	rtc_clear_status(RTC, RTC_SCCR_TDERRCLR);
+}
+
+void RTT_Handler(void)
+{
+	uint32_t ul_status;
+
+	/* Get RTT status - ACK */
+	ul_status = rtt_get_status(RTT);
+
+	/* IRQ due to Time has changed */
+	if ((ul_status & RTT_SR_RTTINC) == RTT_SR_RTTINC) {  }
+
+	/* IRQ due to Alarm */
+	if ((ul_status & RTT_SR_ALMS) == RTT_SR_ALMS) {
+		pin_toggle(led2);    // BLINK Led
+		flag_rtt = 1;                  // flag RTT alarme
+	}
 }
 /************************************************************************/
 /* funcoes                                                              */
@@ -202,8 +237,38 @@ void turnOnLED(component led){
 void turnOffLED(component led){
 	pio_set(led.pio, led.mask);
 }
-void writeLCD(char string[128]){
+void writeLCD(){
 	gfx_mono_draw_string(string, 0,16, &sysfont);
+}
+
+void updateTime(void){
+	seconds += 1;
+	if (seconds == 10){
+		seconds = 0;
+		secondsDozen += 1;
+		if (secondsDozen == 6){
+			secondsDozen = 0;
+			minutes += 1;
+			if (minutes == 10){
+				minutes = 0;
+				minutesDozen += 1;
+				if (minutesDozen == 6){
+					minutesDozen = 0;
+					hours += 1;
+					if (hours == 10){
+						hours = 0;
+						hoursDozen += 1;
+						if (hoursDozen == 24)
+						{
+							hoursDozen = 0;
+						}
+					}
+				}
+			}
+		}
+	}
+	sprintf(string, "%d%d:%d%d:%d%d ", hoursDozen, hours, minutesDozen, minutes, secondsDozen, seconds);
+	writeLCD();
 }
 
 
@@ -223,6 +288,12 @@ void pisca_led(int n, int t, component led){
 	}
 }
 
+void pin_toggle(component led){
+	if(pio_get_output_data_status(led.pio, led.mask))
+	pio_clear(led.pio, led.mask);
+	else
+	pio_set(led.pio,led.mask);
+}
 
 void configureLeds(component leds[], int size){
 
@@ -265,7 +336,8 @@ void TC_init(Tc * TC, int ID_TC, int TC_CHANNEL, int freq){
 	tc_start(TC, TC_CHANNEL);
 }
 
-void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type){
+void RTC_init(Rtc *rtc, uint32_t id_rtc, uint32_t irq_type){
+	calendar t = {2018, 3, 19, 12, 15, 45, 1};
 	/* Configura o PMC */
 	pmc_enable_periph_clk(ID_RTC);
 
@@ -284,6 +356,31 @@ void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type){
 
 	/* Ativa interrupcao via alarme */
 	rtc_enable_interrupt(rtc,  irq_type);
+	
+		/* configura alarme do RTC */
+	//rtc_set_date_alarm(RTC, 1, t.month, 1, t.day);
+	rtc_set_time_alarm(RTC, 1, t.hour, 1, t.minute, 1, t.seccond + 20);
+}
+
+static void RTT_init(uint16_t pllPreScale, uint32_t IrqNPulses)
+{
+	uint32_t ul_previous_time;
+
+	/* Configure RTT for a 1 second tick interrupt */
+	rtt_sel_source(RTT, false);
+	rtt_init(RTT, pllPreScale);
+	
+	ul_previous_time = rtt_read_timer_value(RTT);
+	while (ul_previous_time == rtt_read_timer_value(RTT));
+	
+	rtt_write_alarm_time(RTT, IrqNPulses+ul_previous_time);
+
+	/* Enable RTT interrupt */
+	NVIC_DisableIRQ(RTT_IRQn);
+	NVIC_ClearPendingIRQ(RTT_IRQn);
+	NVIC_SetPriority(RTT_IRQn, 0);
+	NVIC_EnableIRQ(RTT_IRQn);
+	rtt_enable_interrupt(RTT, RTT_MR_ALMIEN);
 }
 
 // Função de inicialização do uC
@@ -310,21 +407,13 @@ void init(void){
 	//Configura os LEDs
 	configureLeds(leds, 4);
 
-// 	//Configura os botões
-// 	configureButtons(myBoardComponents.buttons, 3);
- 	
 	/** Configura timer TC0, canal 1 com 4Hz */
 	TC_init(TC0, ID_TC1, 1, 4);
 	TC_init(TC0, ID_TC2, 2, 5);
 	
 
-	calendar rtc_initial = {2018, 3, 19, 12, 15, 45, 1};
 	/** Configura RTC */
-	RTC_init(RTC, ID_RTC, rtc_initial, RTC_IER_ALREN);
-	
-	/* configura alarme do RTC */
-	rtc_set_date_alarm(RTC, 1, rtc_initial.month, 1, rtc_initial.day);
-	rtc_set_time_alarm(RTC, 1, rtc_initial.hour, 1, rtc_initial.minute, 1, rtc_initial.seccond + 20);
+	RTC_init(RTC, ID_RTC, RTC_IER_ALREN | RTC_IER_SECEN);
 	
 	flag_tc_4hz = 0;
 	flag_tc_5hz = 0;
@@ -343,26 +432,39 @@ void init(void){
 int main (void) {
 	init();
 	
-	char string[128];
-	sprintf(string, "       ");
-	writeLCD(string);
+	 // Inicializa RTT com IRQ no alarme.
+	 flag_rtt = 1;
 
+	sprintf(string, "        ");
+	writeLCD();
+	
 	while(1) {
+		
 		if (flag_tc_4hz) {
 			pisca_led(1,1, led1);
 			flag_tc_4hz = 0;
-		};
-		if (flag_rtt) {
-			pisca_led(1,1, led2);
-			flag_rtt = 0;
 		};
 		if (flag_tc_5hz) {
 			pisca_led(1,1, led3);
 			flag_tc_5hz = 0;
 		};
+		if (flag_rtt){
+		  /*
+		   * IRQ apos 4s -> 8*0.5
+		   */
+		  uint16_t pllPreScale = (int) (((float) 32768) / 4.0);
+		  uint32_t irqRTTvalue = 8;
+      
+		  // reinicia RTT para gerar um novo IRQ
+		  RTT_init(pllPreScale, irqRTTvalue);         
+      
+		  flag_rtt = 0;
+		}
 		if (flag_rtc) {
-			pisca_led(5, 200, ledPlaca);
+			RTC_init(RTC, ID_RTC, RTC_IER_ALREN | RTC_IER_SECEN);
+			pin_toggle(ledPlaca);
 			flag_rtc = 0;
+
 		};
 	};
 	return 0;
