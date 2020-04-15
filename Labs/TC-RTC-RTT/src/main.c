@@ -190,9 +190,6 @@ void RTC_Handler(void)
 	*  na interrupcao, se foi por segundo
 	*  ou Alarm
 	*/
-	if ((ul_status & RTC_SR_SEC) == RTC_SR_SEC) {
-		rtc_clear_status(RTC, RTC_SCCR_SECCLR);
-	}
 	
 	/* Time or date alarm */
 	if ((ul_status & RTC_SR_ALARM) == RTC_SR_ALARM) {
@@ -200,6 +197,11 @@ void RTC_Handler(void)
       flag_rtc = 1;
 	}
 	
+	/*
+	*  Verifica por qual motivo entrou
+	*  na interrupcao, se foi por segundo
+	*  ou Alarm
+	*/
 	if ((ul_status & RTC_SR_SEC) == RTC_SR_SEC) {
 		updateTime();
 		rtc_clear_status(RTC, RTC_SCCR_SECCLR);
